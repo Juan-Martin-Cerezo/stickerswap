@@ -1,4 +1,5 @@
 <?php
+if (isset($_POST["nombre"])) {
     include("config.php");
     $nombre = $_POST["nombre"];
     $telefono = $_POST["telefono"];
@@ -7,20 +8,45 @@
     
     $sql = "INSERT INTO Usuario (nombre, telefono, email, password) VALUES ('$nombre', '$telefono', '$email', '$password')";
     $conexion->query($sql);
-    echo "Usuario registrado correctamente <a href='login.php'>Iniciar sesión</a>";
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registro</title>
+    <title>Registro - StickerSwap</title>
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-    <form action="register.php" method="POST">
-        Nombre <input type="text" name="nombre"><br>
-        Telefono <input type="text" name="telefono"><br>
-        Email <input type="email" name="email"><br>
-        Contraseña <input type="password" name="password"><br>
-        <input type="submit" value="Registrar">
-    </form>
+    <div class="contenedor">
+        <h1>StickerSwap</h1>
+
+        <form action="register.php" method="POST">
+            <div class="campo">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            
+            <div class="campo">
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" name="telefono">
+            </div>
+
+            <div class="campo">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="campo">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <input type="submit" class="boton" value="Registrar">
+        </form>
+        
+        <div class="enlace">
+            <a href="login.php">Inicia Sesión</a>
+        </div>
+    </div>
 </body>
 </html>
