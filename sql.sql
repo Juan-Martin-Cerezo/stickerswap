@@ -1,29 +1,19 @@
-<?php
-$conexion = new mysqli("localhost", "root", "");
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
-}
-
-$conexion->query("CREATE DATABASE IF NOT EXISTS stickerswap");
-
-$conexion->select_db("stickerswap");
-
-$sql = "CREATE TABLE IF NOT EXISTS Usuario (
+CREATE TABLE Usuario (
     ID_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
     telefono VARCHAR(20),
     password VARCHAR(255) NOT NULL
-);";
+);
 
-$sql = "CREATE TABLE IF NOT EXISTS Figurita (
+CREATE TABLE Figurita (
     ID_figurita INT AUTO_INCREMENT PRIMARY KEY,
     numero_figurita INT NOT NULL,
     Seleccion VARCHAR(100) NOT NULL,
     Holografica BOOLEAN NOT NULL DEFAULT 0
-);";
+);
 
-$sql = "CREATE TABLE IF NOT EXISTS Inventario (
+CREATE TABLE Inventario (
     ID_inventario INT AUTO_INCREMENT PRIMARY KEY,
     ID_usuario INT NOT NULL,
     ID_figurita INT NOT NULL,
@@ -31,18 +21,18 @@ $sql = "CREATE TABLE IF NOT EXISTS Inventario (
     repetida BOOLEAN NOT NULL DEFAULT 0,
     CONSTRAINT fk_inventario_usuario FOREIGN KEY (ID_usuario) REFERENCES Usuario(ID_usuario),
     CONSTRAINT fk_inventario_figurita FOREIGN KEY (ID_figurita) REFERENCES Figurita(ID_figurita)
-);";
+);
 
-$sql = "CREATE TABLE IF NOT EXISTS Intercambio (
+CREATE TABLE Intercambio (
     ID_intercambio INT AUTO_INCREMENT PRIMARY KEY,
     ID_usuario_1 INT NOT NULL,
     ID_usuario_2 INT NOT NULL,
     fecha_hora DATETIME,
     CONSTRAINT fk_intercambio_usuario1 FOREIGN KEY (ID_usuario_1) REFERENCES Usuario(ID_usuario),
     CONSTRAINT fk_intercambio_usuario2 FOREIGN KEY (ID_usuario_2) REFERENCES Usuario(ID_usuario)
-);";
+);
 
-$sql = "CREATE TABLE IF NOT EXISTS Mensaje_Chat (
+CREATE TABLE Mensaje_Chat (
     ID_mensaje_chat INT AUTO_INCREMENT PRIMARY KEY,
     ID_intercambio INT NOT NULL,
     ID_usuario INT NOT NULL,
@@ -50,7 +40,4 @@ $sql = "CREATE TABLE IF NOT EXISTS Mensaje_Chat (
     fecha_hora DATETIME,
     CONSTRAINT fk_mensaje_intercambio FOREIGN KEY (ID_intercambio) REFERENCES Intercambio(ID_intercambio),
     CONSTRAINT fk_mensaje_usuario FOREIGN KEY (ID_usuario) REFERENCES Usuario(ID_usuario)
-);";
-
-$conexion->close();
-?>
+);
