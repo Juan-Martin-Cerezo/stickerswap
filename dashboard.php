@@ -10,6 +10,16 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
+// Verificar si completó onboarding
+$stmt_u = $conexion->prepare("SELECT onboarding_completado FROM Usuario WHERE ID_usuario = ?");
+$stmt_u->bind_param("i", $user_id);
+$stmt_u->execute();
+$u_data = $stmt_u->get_result()->fetch_assoc();
+if ($u_data && $u_data['onboarding_completado'] == 0) {
+    header("Location: onboarding.php?step=1");
+    exit;
+}
+
 // Obtener lista de álbumes disponibles
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $albums = [];

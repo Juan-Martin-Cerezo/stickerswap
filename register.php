@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION["user_email"] = $email;
                 $_SESSION["es_premium"] = 0;
                 $_SESSION["avatar"] = $avatar;
-                header("Location: dashboard.php");
+                header("Location: onboarding.php?step=1");
                 exit;
             } else {
                 $error = "Error al crear la cuenta: " . $conexion->error;

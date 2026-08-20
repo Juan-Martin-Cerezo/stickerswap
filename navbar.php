@@ -35,6 +35,9 @@ if ($is_logged && isset($conexion)) {
             <a href="explorar.php?album_id=<?php echo $active_album_id; ?>" class="navbar-link <?php echo ($current_page == 'explorar.php') ? 'active' : ''; ?>">
                 🔍 Matchmaker
             </a>
+            <a href="chat_comunidad.php" class="navbar-link <?php echo ($current_page == 'chat_comunidad.php') ? 'active' : ''; ?>">
+                💬 Chat Comunidad
+            </a>
             <a href="historial.php" class="navbar-link <?php echo ($current_page == 'historial.php' || $current_page == 'intercambio.php') ? 'active' : ''; ?>">
                 🤝 Intercambios 
                 <?php if ($pending_trades_count > 0): ?>

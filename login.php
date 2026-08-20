@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = trim($_POST["password"] ?? "");
 
     if (!empty($email) && !empty($password)) {
-        $stmt = $conexion->prepare("SELECT ID_usuario, nombre, email, es_premium, avatar FROM Usuario WHERE email = ? AND password = ?");
+        $stmt = $conexion->prepare("SELECT ID_usuario, nombre, email, es_premium, avatar, onboarding_completado FROM Usuario WHERE email = ? AND password = ?");
         $stmt->bind_param("ss", $email, $password);
         $stmt->execute();
         $resultado = $stmt->get_result();
@@ -20,7 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["user_email"] = $usuario["email"];
             $_SESSION["es_premium"] = $usuario["es_premium"];
             $_SESSION["avatar"] = $usuario["avatar"];
-            header("Location: dashboard.php");
+
+            if ($usuario["onboarding_completado"] == 0) {
+                header("Location: onboarding.php?step=1");
+            } else {
+                header("Location: dashboard.php");
+            }
             exit;
         } else {
             $error = "Correo electrónico o contraseña incorrectos.";
@@ -81,16 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; font-size: 14px; color: var(--text-secondary);">
                 ¿No tenés una cuenta? <a href="register.php" style="color: var(--panini-gold); font-weight: 700; text-decoration: none;">Registrate acá</a>
-            </div>
-
-            <!-- Accesos rápidos de demo -->
-            <div style="margin-top: 24px; background: var(--bg-surface); padding: 14px; border-radius: 8px; font-size: 13px;">
-                <strong style="color: var(--panini-gold); display: block; margin-bottom: 6px;">💡 Cuentas Demo para Probar:</strong>
-                <div style="display: flex; flex-direction: column; gap: 4px; color: var(--text-secondary);">
-                    <span>• <strong>Juan:</strong> <code>juan@stickerswap.com</code> (clave: <code>1234</code>)</span>
-                    <span>• <strong>Carlos:</strong> <code>carlos@stickerswap.com</code> (clave: <code>1234</code>)</span>
-                    <span>• <strong>Sofia:</strong> <code>sofia@stickerswap.com</code> (clave: <code>1234</code>)</span>
-                </div>
             </div>
         </div>
     </div>
