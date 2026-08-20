@@ -102,12 +102,6 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
                 <div id="usersLobbyList" style="flex: 1; overflow-y: auto;">
                     
                 </div>
-
-                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-color); text-align: center;">
-                    <a href="explorar.php" class="btn-secondary" style="width: 100%; justify-content: center; font-size: 13px;">
-                        🔍 Ir al Matchmaker
-                    </a>
-                </div>
             </div>
         </div>
     </div>

@@ -114,23 +114,6 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
         </div>
 
         
-        <div class="ad-banner-container">
-            <div style="display: flex; align-items: center; gap: 14px;">
-                <span style="font-size: 32px;">🏆</span>
-                <div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <strong style="color: #fff; font-size: 16px;">¡Paquetes Oficiales Panini Mundial 2026 ya a la venta!</strong>
-                        <span class="ad-label">Anuncio Patrocinado</span>
-                    </div>
-                    <p style="color: var(--text-secondary); font-size: 13px; margin-top: 2px;">Comprá sobres virtuales, encontrá las figuritas doradas exclusivas y completá tu álbum antes que nadie.</p>
-                </div>
-            </div>
-            <div>
-                <a href="premium.php" class="btn-secondary" style="font-size: 13px; white-space: nowrap;">
-                    👑 Panini Gold Pass
-                </a>
-            </div>
-        </div>
 
         
         <div class="stats-grid">
@@ -179,19 +162,18 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
 
             <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
-                    <div style="font-size: 32px; margin-bottom: 12px;">🔍</div>
-                    <h3 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;">Matchmaker Inteligente</h3>
-                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">El algoritmo de Panini cruza tu inventario con el de otros coleccionistas para encontrar intercambios perfectos mano a mano.</p>
+                    <div style="font-size: 32px; margin-bottom: 12px;">💬</div>
+                    <h3 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;">Chat de la Comunidad en Vivo</h3>
+                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">Conversá en tiempo real con otros coleccionistas conectados a la red, pedí las figuritas que te faltan y proponé intercambios directos.</p>
                 </div>
                 <div style="margin-top: 20px;">
-                    <a href="explorar.php?album_id=<?php echo $active_album_id; ?>" class="btn-success" style="width: 100%; justify-content: center;">
-                        Encontrar Coleccionistas
+                    <a href="chat_comunidad.php" class="btn-success" style="width: 100%; justify-content: center;">
+                        Abrir Chat Global
                     </a>
                 </div>
             </div>
         </div>
 
-        
         <div class="section-title-wrapper">
             <h2 class="section-title">
                 <span>💬</span> Mis Negociaciones e Intercambios Activos
@@ -242,10 +224,10 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
                 <div style="font-size: 40px; margin-bottom: 12px;">🤝</div>
                 <h4 style="color: #fff; font-size: 17px; font-weight: 700;">No tenés negociaciones abiertas en este momento</h4>
                 <p style="color: var(--text-secondary); font-size: 14px; max-width: 480px; margin: 6px auto 18px;">
-                    Usá el explorador inteligente para encontrar usuarios que tengan las cartas que buscás y comenzar un intercambio en tiempo real.
+                    Podés entrar al chat de la comunidad para encontrar otros coleccionistas y proponerles un intercambio en tiempo real.
                 </p>
-                <a href="explorar.php?album_id=<?php echo $active_album_id; ?>" class="btn-primary">
-                    Explorar Coleccionistas Compatibles
+                <a href="chat_comunidad.php" class="btn-primary">
+                    Ir al Chat de la Comunidad
                 </a>
             </div>
         <?php endif; ?>

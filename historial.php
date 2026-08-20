@@ -43,8 +43,8 @@ $trades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--panini-gold); font-weight: 700;">Registro Oficial de Transacciones</span>
                 <h1 style="font-size: 28px; font-weight: 800; color: #fff; margin-top: 4px;">Historial de Intercambios</h1>
             </div>
-            <a href="explorar.php" class="btn-primary">
-                🔍 Buscar Nuevos Intercambios
+            <a href="chat_comunidad.php" class="btn-primary">
+                💬 Ir al Chat de la Comunidad
             </a>
         </div>
 
@@ -111,7 +111,6 @@ $trades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             </div>
                         </div>
 
-                        
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px;">
                             <div>
                                 <span style="color: var(--panini-gold); font-weight: 700;">📤 Entregaste:</span>
@@ -155,7 +154,7 @@ $trades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <p style="color: var(--text-secondary); font-size: 14px; max-width: 440px; margin: 6px auto 20px;">
                     Cuando propongas o completes intercambios con otros coleccionistas, quedará registrado todo el detalle aquí.
                 </p>
-                <a href="explorar.php" class="btn-primary">Iniciar un Intercambio</a>
+                <a href="chat_comunidad.php" class="btn-primary">Ir al Chat de la Comunidad</a>
             </div>
         <?php endif; ?>
     </div>

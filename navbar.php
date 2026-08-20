@@ -30,9 +30,6 @@ if ($is_logged && isset($conexion)) {
             <a href="album.php?album_id=<?php echo $active_album_id; ?>" class="navbar-link <?php echo ($current_page == 'album.php') ? 'active' : ''; ?>">
                 📖 Mi Álbum
             </a>
-            <a href="explorar.php?album_id=<?php echo $active_album_id; ?>" class="navbar-link <?php echo ($current_page == 'explorar.php') ? 'active' : ''; ?>">
-                🔍 Matchmaker
-            </a>
             <a href="chat_comunidad.php" class="navbar-link <?php echo ($current_page == 'chat_comunidad.php') ? 'active' : ''; ?>">
                 💬 Chat Comunidad
             </a>
@@ -42,16 +39,10 @@ if ($is_logged && isset($conexion)) {
                     <span class="badge-counter"><?php echo $pending_trades_count; ?></span>
                 <?php endif; ?>
             </a>
-            <a href="premium.php" class="navbar-link <?php echo ($current_page == 'premium.php') ? 'active' : ''; ?>" style="color: var(--panini-gold);">
-                👑 Premium
-            </a>
 
-            <div class="user-pill <?php echo (!empty($_SESSION['es_premium'])) ? 'is-premium' : ''; ?>">
+            <div class="user-pill">
                 <span><?php echo $_SESSION['avatar'] ?? '👤'; ?></span>
                 <span><?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-                <?php if (!empty($_SESSION['es_premium'])): ?>
-                    <span style="font-size: 11px; background: var(--panini-gold); color: #000; padding: 1px 5px; border-radius: 4px; font-weight: 800;">GOLD</span>
-                <?php endif; ?>
             </div>
             <a href="logout.php" class="btn-secondary" style="padding: 6px 12px; font-size: 13px;">Salir</a>
         <?php else: ?>
