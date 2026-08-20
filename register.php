@@ -1,4 +1,5 @@
 <?php
+session_start();
 if (isset($_POST["nombre"])) {
     include("config.php");
     $nombre = $_POST["nombre"];
@@ -7,7 +8,12 @@ if (isset($_POST["nombre"])) {
     $password = $_POST["password"];
     
     $sql = "INSERT INTO Usuario (nombre, telefono, email, password) VALUES ('$nombre', '$telefono', '$email', '$password')";
-    $conexion->query($sql);
+    if ($conexion->query($sql)) {
+        $_SESSION["user_id"] = $conexion->insert_id;
+        $_SESSION["user_name"] = $nombre;
+        header("Location: dashboard.php");
+        exit;
+    }
 }
 ?>
 <!DOCTYPE html>

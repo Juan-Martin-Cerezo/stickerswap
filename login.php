@@ -1,16 +1,20 @@
 <?php
+session_start();
 if (isset($_POST["email"])) {
     include("config.php");
     $email = $_POST["email"];
     $password = $_POST["password"];
-    
     $sql = "SELECT * FROM Usuario WHERE email = '$email' AND password = '$password'";
     $resultado = $conexion->query($sql);
     
     if ($resultado->num_rows > 0) {
-        echo "Sesión iniciada correctamente. ¡Bienvenido!";
+        $usuario = $resultado->fetch_assoc();
+        $_SESSION["user_id"] = $usuario["ID_usuario"];
+        $_SESSION["user_name"] = $usuario["nombre"];
+        header("Location: dashboard.php");
+        exit;
     } else {
-        echo "Usuario o contraseña incorrectos. <a href='login.php'>Volver a intentar</a>";
+        $error = "Usuario o contraseña incorrectos.";
     }
 }
 ?>
@@ -23,6 +27,10 @@ if (isset($_POST["email"])) {
 <body>
     <div class="contenedor">
         <h1>StickerSwap</h1>
+
+        <?php if (isset($error)): ?>
+            <div style="color: red; text-align: center; margin-bottom: 15px; font-size: 14px;"><?php echo $error; ?></div>
+        <?php endif; ?>
 
         <form action="login.php" method="POST">
             <div class="campo">
