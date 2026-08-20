@@ -145,7 +145,7 @@ $albumes = [
     [
         'codigo' => 'pokemon',
         'nombre' => 'Pokémon - Colección Kanto Clásico',
-        'descripcion' => 'Colección legendaria de los 151 Pokémon originales de la región de Kanto.',
+        'descripcion' => 'Colección de los 151 Pokémon originales de la región de Kanto.',
         'categoria' => 'Anime & Gaming',
         'icono' => '⚡',
         'color_tema' => '#dc2626'

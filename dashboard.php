@@ -129,19 +129,16 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
             <div class="stat-card">
                 <span class="stat-title">Figuritas en Álbum</span>
                 <div class="stat-value" style="color: var(--panini-emerald);"><?php echo $owned_figs; ?></div>
-                <div class="stat-subtitle">Cromos únicos en tu posesión</div>
             </div>
 
             <div class="stat-card">
                 <span class="stat-title">Te Faltan</span>
                 <div class="stat-value" style="color: var(--panini-red);"><?php echo $missing_figs; ?></div>
-                <div class="stat-subtitle">Para llenar el álbum completo</div>
             </div>
 
             <div class="stat-card">
                 <span class="stat-title">Repetidas para Cambio</span>
                 <div class="stat-value" style="color: #38bdf8;"><?php echo $repetidas_totales; ?></div>
-                <div class="stat-subtitle"><?php echo "$distintas_repetidas cartas diferentes listas"; ?></div>
             </div>
         </div>
 
@@ -151,7 +148,6 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
                 <div>
                     <div style="font-size: 32px; margin-bottom: 12px;">🎴</div>
                     <h3 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;">Gestionar Mi Álbum</h3>
-                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">Revisá todas las selecciones y cromos. Marcá con un solo clic las que tenés pegadas, sumá repetidas o marcá las faltantes.</p>
                 </div>
                 <div style="margin-top: 20px;">
                     <a href="album.php?album_id=<?php echo $active_album_id; ?>" class="btn-primary" style="width: 100%; justify-content: center;">
@@ -164,7 +160,6 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
                 <div>
                     <div style="font-size: 32px; margin-bottom: 12px;">💬</div>
                     <h3 style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;">Chat de la Comunidad en Vivo</h3>
-                    <p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5;">Conversá en tiempo real con otros coleccionistas conectados a la red, pedí las figuritas que te faltan y proponé intercambios directos.</p>
                 </div>
                 <div style="margin-top: 20px;">
                     <a href="chat_comunidad.php" class="btn-success" style="width: 100%; justify-content: center;">

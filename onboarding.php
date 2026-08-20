@@ -156,38 +156,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             gap: 8px;
             font-size: 14px;
             font-weight: 700;
-            color: var(
+            color: var(--text-muted);
         }
         .step-node.active {
-            color: var(
+            color: var(--panini-gold);
         }
         .step-circle {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: var(
-            border: 2px solid var(
+            background: var(--bg-surface);
+            border: 2px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
         }
         .step-node.active .step-circle {
-            border-color: var(
+            border-color: var(--panini-gold);
             background: rgba(252, 212, 0, 0.2);
-            color: var(
+            color: var(--panini-gold);
         }
         .album-selection-card {
-            background: var(
-            border: 2px solid var(
-            border-radius: var(
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-lg);
             padding: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
         }
         .album-selection-card:hover {
-            border-color: var(
+            border-color: var(--panini-gold);
             transform: translateY(-3px);
         }
         .album-selection-card input[type="checkbox"] {
@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             right: 18px;
             width: 22px;
             height: 22px;
-            accent-color: var(
+            accent-color: var(--panini-gold);
             cursor: pointer;
         }
     </style>
@@ -253,9 +253,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <button type="button" class="btn-secondary" onclick="toggleCustomModal()">
-                        ➕ Crear Álbum Personalizado
-                    </button>
                     <button type="submit" class="btn-primary" style="padding: 12px 32px; font-size: 16px;">
                         Continuar al Paso 2 →
                     </button>
@@ -343,7 +340,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
                                 Omitir y cargar luego
                             </button>
                             <button type="submit" class="btn-primary" style="padding: 12px 32px; font-size: 16px;">
-                                ¡Finalizar y Entrar al Dashboard! 🎉
+                                Finalizar
                             </button>
                         </div>
                     </div>

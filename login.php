@@ -59,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div style="text-align: center; margin-bottom: 24px;">
                 <div style="font-size: 44px; margin-bottom: 8px;">⚽</div>
                 <h1 style="font-size: 26px; font-weight: 800; color: #fff;">Iniciar Sesión</h1>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Ingresá a tu cuenta para gestionar tus álbumes e intercambiar figuritas.</p>
             </div>
 
             <?php if (!empty($error)): ?>
@@ -80,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
 
                 <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 12px; padding: 12px;">
-                    Entrar al Sistema
+                    Entrar
                 </button>
             </form>
 

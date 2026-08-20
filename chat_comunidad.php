@@ -56,12 +56,8 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
     <div class="main-wrapper" style="padding-bottom: 20px;">
         <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--panini-gold); font-weight: 700;">Sala Oficial de la Red</span>
                 <h1 style="font-size: 24px; font-weight: 800; color: #fff;">💬 Chat de la Comunidad en Vivo</h1>
             </div>
-            <span style="font-size: 13px; color: #34d399; display: flex; align-items: center; gap: 6px;">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: #34d399;"></span> Conexión en Tiempo Real
-            </span>
         </div>
 
         <div class="community-layout">
@@ -85,9 +81,9 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
                     </div>
 
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="communityInput" class="chat-input" placeholder="Escribí un mensaje para todos los coleccionistas en la red... (Ej: Busco a Messi #5, tengo a Mbappé repetido!)" autocomplete="off" required>
+                        <input type="text" id="communityInput" class="chat-input" placeholder="Escribí un mensaje " autocomplete="off" required>
                         <button type="submit" class="btn-primary" style="padding: 10px 24px;">
-                            Publicar
+                            Enviar
                         </button>
                     </div>
                 </form>
@@ -96,7 +92,7 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
             
             <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column;">
                 <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-                    <span>👥</span> Coleccionistas en la Red
+                    <span>👥</span> Usuarios conectados
                 </h3>
 
                 <div id="usersLobbyList" style="flex: 1; overflow-y: auto;">

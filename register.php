@@ -63,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div style="text-align: center; margin-bottom: 24px;">
                 <div style="font-size: 44px; margin-bottom: 8px;">🌟</div>
                 <h1 style="font-size: 26px; font-weight: 800; color: #fff;">Crear Cuenta</h1>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">Unite a la comunidad oficial de Panini StickerSwap e intercambiá en tiempo real.</p>
             </div>
 
             <?php if (!empty($error)): ?>
@@ -74,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <form action="register.php" method="POST">
                 <div class="form-group">
-                    <label class="form-label" for="nombre">Nombre de Coleccionista *</label>
+                    <label class="form-label" for="nombre">Nombre *</label>
                     <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Ej: Martin_Colecciones" required value="<?php echo htmlspecialchars($_POST['nombre'] ?? ''); ?>">
                 </div>
 
@@ -93,23 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <input type="password" id="password" name="password" class="form-input" placeholder="Mínimo 4 caracteres" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Elegí tu Avatar</label>
-                    <div style="display: flex; gap: 12px; margin-top: 6px;">
-                        <?php 
-                        $avatars = ['⚽', '🌟', '👑', '🏆', '⚡', '🎮'];
-                        foreach ($avatars as $av): 
-                        ?>
-                            <label style="cursor: pointer; background: var(--bg-surface); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 20px; display: flex; align-items: center; gap: 4px;">
-                                <input type="radio" name="avatar" value="<?php echo $av; ?>" <?php echo ($av === '⚽') ? 'checked' : ''; ?>>
-                                <?php echo $av; ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
 
                 <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 16px; padding: 12px;">
-                    Registrarme y Coleccionar
+                    Registrarme
                 </button>
             </form>
 
