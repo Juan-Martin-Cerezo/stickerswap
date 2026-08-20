@@ -53,7 +53,7 @@ body {
         radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
 }
 
-/* NAVBAR */
+
 .navbar {
     background: rgba(19, 27, 46, 0.85);
     backdrop-filter: blur(12px);
@@ -140,7 +140,7 @@ body {
     box-shadow: var(--shadow-gold);
 }
 
-/* BUTTONS */
+
 .btn-primary {
     background: linear-gradient(135deg, #fcd400, #f59e0b);
     color: #0b0f19;
@@ -226,7 +226,7 @@ body {
     opacity: 0.9;
 }
 
-/* MAIN LAYOUT */
+
 .main-wrapper {
     max-width: 1280px;
     width: 100%;
@@ -235,7 +235,7 @@ body {
     flex: 1;
 }
 
-/* ALBUM SELECTOR BAR */
+
 .album-selector-bar {
     display: flex;
     align-items: center;
@@ -277,7 +277,7 @@ body {
     font-size: 20px;
 }
 
-/* DASHBOARD STATS GRID */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -333,7 +333,7 @@ body {
     color: var(--text-secondary);
 }
 
-/* PROGRESS BAR */
+
 .progress-container {
     background: var(--bg-surface);
     height: 12px;
@@ -350,7 +350,7 @@ body {
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* CARDS & SELECCIONES GRID */
+
 .section-title-wrapper {
     display: flex;
     justify-content: space-between;
@@ -400,7 +400,7 @@ body {
     margin-bottom: 36px;
 }
 
-/* FIGURITA CARD */
+
 .sticker-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -442,7 +442,7 @@ body {
     box-shadow: 0 4px 16px rgba(252, 212, 0, 0.15);
 }
 
-/* HOLOGRAPHIC SHINE EFFECT */
+
 .sticker-card.holo {
     background: linear-gradient(135deg, #1e1b4b, #172554, #1f2937);
     border-color: #eab308;
@@ -568,7 +568,7 @@ body {
     border-color: var(--panini-blue);
 }
 
-/* NEGOTIATION / INTERCAMBIO ROOM */
+
 .trade-container {
     display: grid;
     grid-template-columns: 1fr 380px;
@@ -644,7 +644,7 @@ body {
     margin: 0 auto;
 }
 
-/* CHAT INTEGRADO */
+
 .chat-panel {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -738,7 +738,7 @@ body {
     border-color: var(--panini-blue);
 }
 
-/* AD PROVIDER SIMULATION & PREMIUM BANNER */
+
 .ad-banner-container {
     background: linear-gradient(90deg, #1e1b4b, #311042);
     border: 1px dashed rgba(252, 212, 0, 0.4);
@@ -760,7 +760,7 @@ body {
     text-transform: uppercase;
 }
 
-/* AUTH FORM (LOGIN/REGISTER) */
+
 .auth-container {
     max-width: 440px;
     margin: 40px auto;
@@ -799,7 +799,7 @@ body {
     border-color: var(--panini-gold);
 }
 
-/* MATCHMAKER MATCH CARDS */
+
 .match-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);

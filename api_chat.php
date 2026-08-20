@@ -18,7 +18,6 @@ if ($trade_id <= 0) {
     exit;
 }
 
-// Validar que el usuario sea parte del intercambio
 $stmt_perm = $conexion->prepare("SELECT ID_intercambio, estado FROM Intercambio WHERE ID_intercambio = ? AND (ID_usuario_1 = ? OR ID_usuario_2 = ?)");
 $stmt_perm->bind_param("iii", $trade_id, $user_id, $user_id);
 $stmt_perm->execute();
@@ -29,7 +28,6 @@ if (!$trade_perm) {
     exit;
 }
 
-// 1. ENVIAR MENSAJE
 if ($action === 'send_message') {
     $mensaje = trim($_POST['mensaje'] ?? '');
     if (!empty($mensaje)) {
@@ -39,7 +37,6 @@ if ($action === 'send_message') {
     }
 }
 
-// 2. OBTENER MENSAJES (Soporta delta a través de last_id)
 $stmt_msgs = $conexion->prepare("
     SELECT m.*, u.nombre as autor_nombre, u.avatar as autor_avatar
     FROM Mensaje_Chat m

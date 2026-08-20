@@ -1,7 +1,6 @@
 <?php
 include("config.php");
 
-// Desactivar temporalmente foreign keys para recreación limpia
 $conexion->query("SET FOREIGN_KEY_CHECKS = 0");
 $conexion->query("DROP TABLE IF EXISTS Mensaje_Comunidad");
 $conexion->query("DROP TABLE IF EXISTS Mensaje_Chat");
@@ -14,7 +13,6 @@ $conexion->query("DROP TABLE IF EXISTS Album");
 $conexion->query("DROP TABLE IF EXISTS Usuario");
 $conexion->query("SET FOREIGN_KEY_CHECKS = 1");
 
-// Crear tablas
 $sql_tables = "
 CREATE TABLE IF NOT EXISTS Usuario (
     ID_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -39,7 +37,7 @@ CREATE TABLE IF NOT EXISTS Album (
     icono VARCHAR(50) DEFAULT '🎴',
     color_tema VARCHAR(50) DEFAULT '#1e3a8a',
     total_figuritas INT DEFAULT 0,
-    creado_por INT DEFAULT 0 -- 0 = Panini Oficial, >0 = Creado por usuario
+    creado_por INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS Usuario_Album (
@@ -125,7 +123,6 @@ CREATE TABLE IF NOT EXISTS Mensaje_Comunidad (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
-// Ejecutar creación de tablas
 $queries = explode(";", $sql_tables);
 foreach ($queries as $q) {
     $q = trim($q);
@@ -136,7 +133,6 @@ foreach ($queries as $q) {
     }
 }
 
-// 1. POBLAR CATÁLOGO OFICIAL DE ÁLBUMES Y SUS FIGURITAS (Plantillas base para que los usuarios elijan)
 $albumes = [
     [
         'codigo' => 'mundial2026',
@@ -172,16 +168,13 @@ foreach ($albumes as $alb) {
     $stmt->execute();
 }
 
-// Obtener IDs de álbumes
 $res_alb = $conexion->query("SELECT ID_album, codigo FROM Album");
 $album_ids = [];
 while ($row = $res_alb->fetch_assoc()) {
     $album_ids[$row['codigo']] = $row['ID_album'];
 }
 
-// 2. POBLAR FIGURITAS DEL CATÁLOGO OFICIAL
 $figuritas_data = [
-    // === MUNDIAL 2026 ===
     'mundial2026' => [
         [1, 'FWC-00', 'Trofeo de la Copa Mundial', 'Especiales', 'Trofeo Oficial', 1, 'Legendaria Oro'],
         [2, 'FWC-01', 'Emblema Oficial 2026', 'Especiales', 'Emblema', 1, 'Holográfica'],
@@ -217,7 +210,6 @@ $figuritas_data = [
         [32, 'GER-10', 'Jamal Musiala', 'Alemania', 'Mediapunta', 1, 'Holográfica'],
         [33, 'GER-07', 'Florian Wirtz', 'Alemania', 'Mediapunta', 1, 'Holográfica']
     ],
-    // === POKÉMON KANTO ===
     'pokemon' => [
         [1, 'PKM-001', 'Bulbasaur', 'Planta / Veneno', 'Inicial', 0, 'Común'],
         [2, 'PKM-002', 'Ivysaur', 'Planta / Veneno', 'Evolución 1', 0, 'Común'],
@@ -241,7 +233,6 @@ $figuritas_data = [
         [20, 'PKM-150', 'Mewtwo', 'Psíquico', 'Legendario Máximo', 1, 'Legendaria Oro'],
         [21, 'PKM-151', 'Mew', 'Psíquico', 'Mítico', 1, 'Legendaria Oro']
     ],
-    // === PANINI TOP CLASS 2025 ===
     'panini_top_class' => [
         [1, 'TOP-01', 'Trofeo UEFA Champions League', 'Especiales', 'Trofeo', 1, 'Legendaria Oro'],
         [2, 'TOP-02', 'Erling Haaland (Manchester City)', 'Goleadores Top', 'Delantero', 1, 'Legendaria Oro'],
@@ -271,7 +262,6 @@ foreach ($figuritas_data as $alb_code => $figs) {
     $conexion->query("UPDATE Album SET total_figuritas = (SELECT COUNT(*) FROM Figurita WHERE ID_album = $alb_id) WHERE ID_album = $alb_id");
 }
 
-// 0 USUARIOS FICTICIOS - BASE TOTALMENTE LIMPIA PARA USUARIOS REALES
 
 echo "<div style='font-family: sans-serif; padding: 30px; background: #0f172a; color: #f8fafc; border-radius: 12px; max-width: 600px; margin: 40px auto; text-align: center;'>
     <h2 style='color: #fcd400;'>🎉 ¡Base de Datos Limpia e Inicializada!</h2>

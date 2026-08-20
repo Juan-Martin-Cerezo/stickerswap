@@ -2,7 +2,6 @@
 session_start();
 include("config.php");
 
-// Redirigir si no está logueado
 if (!isset($_SESSION["user_id"])) {
     header("Location: login.php");
     exit;
@@ -10,7 +9,6 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-// Verificar si completó onboarding
 $stmt_u = $conexion->prepare("SELECT onboarding_completado FROM Usuario WHERE ID_usuario = ?");
 $stmt_u->bind_param("i", $user_id);
 $stmt_u->execute();
@@ -20,18 +18,15 @@ if ($u_data && $u_data['onboarding_completado'] == 0) {
     exit;
 }
 
-// Obtener lista de álbumes disponibles
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $albums = [];
 while ($row = $res_albums->fetch_assoc()) {
     $albums[] = $row;
 }
 
-// Determinar álbum activo
 $active_album_id = intval($_GET['album_id'] ?? $_SESSION['active_album_id'] ?? ($albums[0]['ID_album'] ?? 1));
 $_SESSION['active_album_id'] = $active_album_id;
 
-// Obtener datos del álbum activo
 $stmt_cur_alb = $conexion->prepare("SELECT * FROM Album WHERE ID_album = ?");
 $stmt_cur_alb->bind_param("i", $active_album_id);
 $stmt_cur_alb->execute();
@@ -42,14 +37,11 @@ if (!$current_album && !empty($albums)) {
     $active_album_id = $current_album['ID_album'];
 }
 
-// Métricas del álbum para este usuario:
-// 1. Total figuritas del álbum
 $stmt_total = $conexion->prepare("SELECT COUNT(*) as total FROM Figurita WHERE ID_album = ?");
 $stmt_total->bind_param("i", $active_album_id);
 $stmt_total->execute();
 $total_figs = $stmt_total->get_result()->fetch_assoc()['total'] ?? 0;
 
-// 2. Figuritas que tiene el usuario en este álbum (pegadas o en posesión)
 $stmt_owned = $conexion->prepare("
     SELECT COUNT(DISTINCT i.ID_figurita) as owned,
            SUM(CASE WHEN i.cantidad_repetidas > 0 THEN i.cantidad_repetidas ELSE 0 END) as repetidas_totales,
@@ -68,7 +60,6 @@ $distintas_repetidas = $stats_row['distintas_repetidas'] ?? 0;
 $missing_figs = max(0, $total_figs - $owned_figs);
 $progress_pct = ($total_figs > 0) ? round(($owned_figs / $total_figs) * 100) : 0;
 
-// Intercambios activos / pendientes del usuario
 $stmt_trades = $conexion->prepare("
     SELECT i.*, 
            u1.nombre as proponente_nombre, u1.avatar as proponente_avatar,
@@ -98,7 +89,7 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
     <?php include("navbar.php"); ?>
 
     <div class="main-wrapper">
-        <!-- Selector de Álbumes -->
+        
         <div style="margin-bottom: 8px; display: flex; justify-content: space-between; align-items: flex-end;">
             <div>
                 <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--panini-gold); font-weight: 700;">Colecciones Panini Disponibles</span>
@@ -122,7 +113,7 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
             <?php endforeach; ?>
         </div>
 
-        <!-- Banner Publicitario Panini / Simulación Ad Provider -->
+        
         <div class="ad-banner-container">
             <div style="display: flex; align-items: center; gap: 14px;">
                 <span style="font-size: 32px;">🏆</span>
@@ -141,7 +132,7 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
 
-        <!-- Estadísticas del Álbum Seleccionado -->
+        
         <div class="stats-grid">
             <div class="stat-card">
                 <span class="stat-title">Progreso del Álbum</span>
@@ -171,7 +162,7 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
 
-        <!-- Accesos Directos a Flujos Principales -->
+        
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 36px;">
             <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
@@ -200,7 +191,7 @@ $active_trades = $stmt_trades->get_result()->fetch_all(MYSQLI_ASSOC);
             </div>
         </div>
 
-        <!-- Negociaciones Activas y Chat -->
+        
         <div class="section-title-wrapper">
             <h2 class="section-title">
                 <span>💬</span> Mis Negociaciones e Intercambios Activos

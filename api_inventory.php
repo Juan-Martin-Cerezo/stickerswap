@@ -18,7 +18,6 @@ if ($fig_id <= 0) {
     exit;
 }
 
-// Obtener estado actual del inventario
 $stmt = $conexion->prepare("SELECT * FROM Inventario WHERE ID_usuario = ? AND ID_figurita = ?");
 $stmt->bind_param("ii", $user_id, $fig_id);
 $stmt->execute();
@@ -56,7 +55,6 @@ if ($action === 'toggle_owned') {
     $new_rep = 0;
 }
 
-// Guardar en la base de datos
 if ($new_status === 'falta') {
     $del_stmt = $conexion->prepare("DELETE FROM Inventario WHERE ID_usuario = ? AND ID_figurita = ?");
     $del_stmt->bind_param("ii", $user_id, $fig_id);
@@ -71,7 +69,6 @@ if ($new_status === 'falta') {
     $save_stmt->execute();
 }
 
-// Recalcular estadísticas del álbum
 $stmt_total = $conexion->prepare("SELECT COUNT(*) as total FROM Figurita WHERE ID_album = ?");
 $stmt_total->bind_param("i", $album_id);
 $stmt_total->execute();

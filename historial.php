@@ -9,7 +9,6 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-// Obtener todos los intercambios donde el usuario participó
 $stmt = $conexion->prepare("
     SELECT i.*, 
            u1.nombre as user1_nombre, u1.avatar as user1_avatar,
@@ -56,7 +55,6 @@ $trades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                     $other_name = $is_user1 ? $t['user2_nombre'] : $t['user1_nombre'];
                     $other_avatar = $is_user1 ? $t['user2_avatar'] : $t['user1_avatar'];
 
-                    // Obtener items intercambiados
                     $tid = $t['ID_intercambio'];
                     $res_items = $conexion->query("
                         SELECT it.*, f.numero_figurita, f.nombre_jugador, f.Holografica 
@@ -113,7 +111,7 @@ $trades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                             </div>
                         </div>
 
-                        <!-- Detalle de figuritas intercambiadas -->
+                        
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13px;">
                             <div>
                                 <span style="color: var(--panini-gold); font-weight: 700;">📤 Entregaste:</span>

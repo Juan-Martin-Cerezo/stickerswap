@@ -13,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $avatar = $_POST["avatar"] ?? "⚽";
 
     if (!empty($nombre) && !empty($email) && !empty($password)) {
-        // Verificar si el email ya existe
         $check = $conexion->prepare("SELECT ID_usuario FROM Usuario WHERE email = ?");
         $check->bind_param("s", $email);
         $check->execute();

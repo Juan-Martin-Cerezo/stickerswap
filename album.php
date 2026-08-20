@@ -9,14 +9,12 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-// Obtener todos los álbumes
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
 
 $active_album_id = intval($_GET['album_id'] ?? $_SESSION['active_album_id'] ?? ($albums[0]['ID_album'] ?? 1));
 $_SESSION['active_album_id'] = $active_album_id;
 
-// Datos del álbum activo
 $stmt_alb = $conexion->prepare("SELECT * FROM Album WHERE ID_album = ?");
 $stmt_alb->bind_param("i", $active_album_id);
 $stmt_alb->execute();
@@ -27,7 +25,6 @@ if (!$current_album && !empty($albums)) {
     $active_album_id = $current_album['ID_album'];
 }
 
-// Obtener todas las figuritas del álbum y cruzar con inventario del usuario
 $stmt_figs = $conexion->prepare("
     SELECT f.*, 
            IFNULL(i.estado, 'falta') as user_status, 
@@ -42,7 +39,6 @@ $stmt_figs->bind_param("ii", $user_id, $active_album_id);
 $stmt_figs->execute();
 $figuritas = $stmt_figs->get_result()->fetch_all(MYSQLI_ASSOC);
 
-// Agrupar figuritas por Seleccion / Categoría
 $grouped_figs = [];
 $total_figs = count($figuritas);
 $owned_count = 0;
@@ -74,7 +70,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
     <?php include("navbar.php"); ?>
 
     <div class="main-wrapper">
-        <!-- Selector de Álbumes Superior -->
+        
         <div class="album-selector-bar">
             <?php foreach ($albums as $alb): ?>
                 <a href="album.php?album_id=<?php echo $alb['ID_album']; ?>" 
@@ -85,7 +81,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
             <?php endforeach; ?>
         </div>
 
-        <!-- Encabezado del Álbum -->
+        
         <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
             <div style="display: flex; align-items: center; gap: 16px;">
                 <div style="font-size: 48px; background: var(--bg-surface); width: 80px; height: 80px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color);">
@@ -98,7 +94,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
                 </div>
             </div>
 
-            <!-- Mini Widget de Progreso -->
+            
             <div style="min-width: 240px; background: var(--bg-surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
                 <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px;">
                     <span style="color: var(--text-secondary);">Progreso de Colección</span>
@@ -114,7 +110,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
             </div>
         </div>
 
-        <!-- Barra de Filtros y Búsqueda -->
+        
         <div style="background: var(--bg-surface); padding: 14px 20px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
             <div class="filters-bar" style="margin-bottom: 0;">
                 <button class="filter-btn active" onclick="filterStickers('all', this)">Todas (<?php echo $total_figs; ?>)</button>
@@ -131,7 +127,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
             </div>
         </div>
 
-        <!-- Secciones y Cuadrícula de Figuritas -->
+        
         <?php foreach ($grouped_figs as $seccion_nombre => $figs_list): ?>
             <div class="category-section" data-category="<?php echo htmlspecialchars($seccion_nombre); ?>">
                 <div class="section-title-wrapper">
@@ -173,7 +169,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
 
                             <span class="sticker-number-badge">#<?php echo $f['numero_figurita']; ?></span>
 
-                            <!-- Avatar / Icono -->
+                            
                             <div class="sticker-avatar">
                                 <?php 
                                 if (strpos($seccion_nombre, 'Planta') !== false) echo '🍃';
@@ -189,7 +185,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
                             <div class="sticker-name"><?php echo htmlspecialchars($f['nombre_jugador']); ?></div>
                             <div class="sticker-team"><?php echo htmlspecialchars($f['codigo_figurita']) . ' • ' . htmlspecialchars($f['posicion_rol']); ?></div>
 
-                            <!-- Estado Tag -->
+                            
                             <div id="tag-<?php echo $f['ID_figurita']; ?>" class="sticker-status-tag tag-<?php echo $f['user_status']; ?>">
                                 <?php 
                                 if ($f['user_status'] === 'repetida' && $f['repetidas'] > 0) {
@@ -202,7 +198,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
                                 ?>
                             </div>
 
-                            <!-- Botones de Acción Rápida -->
+                            
                             <div class="sticker-actions">
                                 <button type="button" class="btn-sticker-action" title="Alternar Tengo/Falta" onclick="updateInventory(<?php echo $f['ID_figurita']; ?>, 'toggle_owned')">
                                     ✓ Tengo
@@ -223,7 +219,7 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
         <?php endforeach; ?>
     </div>
 
-    <!-- Script AJAX para gestión instantánea -->
+    
     <script>
         const ALBUM_ID = <?php echo $active_album_id; ?>;
 
@@ -245,11 +241,9 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
                     const tag = document.getElementById('tag-' + figId);
                     const isHolo = card.getAttribute('data-holo') === '1';
 
-                    // Actualizar dataset
                     card.setAttribute('data-status', data.status);
                     card.setAttribute('data-rep', data.repetidas);
 
-                    // Actualizar clases de la tarjeta
                     card.className = 'sticker-card';
                     if (isHolo) card.classList.add('holo');
 
@@ -267,7 +261,6 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
                         tag.innerText = '✓ Pegada';
                     }
 
-                    // Actualizar métricas en la barra superior
                     document.getElementById('stat-progress-text').innerText = data.progress_pct + '%';
                     document.getElementById('stat-progress-fill').style.width = data.progress_pct + '%';
                     document.getElementById('stat-owned-count').innerText = data.owned_figs;
@@ -278,7 +271,6 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
             }
         }
 
-        // Filtro de cartas por estado
         function filterStickers(filterType, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -303,7 +295,6 @@ $progress_pct = ($total_figs > 0) ? round(($owned_count / $total_figs) * 100) : 
             });
         }
 
-        // Búsqueda en tiempo real
         function searchStickers(query) {
             const q = query.toLowerCase().trim();
             document.querySelectorAll('.sticker-card').forEach(card => {

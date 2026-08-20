@@ -10,7 +10,6 @@ if (!isset($_SESSION["user_id"])) {
 $user_id = $_SESSION["user_id"];
 $msg = "";
 
-// Toggle Premium para pruebas de demo
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["toggle_premium"])) {
     $current_premium = !empty($_SESSION["es_premium"]) ? 0 : 1;
     $conexion->query("UPDATE Usuario SET es_premium = $current_premium WHERE ID_usuario = $user_id");
@@ -18,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["toggle_premium"])) {
     $msg = ($current_premium == 1) ? "🎉 ¡Felicidades! Activaste tu membresía Panini Gold Pass." : "Membresía desactivada.";
 }
 
-// Consultar estado actual
 $stmt = $conexion->prepare("SELECT es_premium, nombre, avatar FROM Usuario WHERE ID_usuario = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -54,7 +52,7 @@ $is_premium = ($usr['es_premium'] == 1);
             </div>
         <?php endif; ?>
 
-        <!-- Tarjetas de Beneficios -->
+        
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto 36px;">
             <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 24px;">
                 <div style="font-size: 36px; margin-bottom: 12px;">🚫</div>
@@ -75,7 +73,7 @@ $is_premium = ($usr['es_premium'] == 1);
             </div>
         </div>
 
-        <!-- Panel de Estado y Activación -->
+        
         <div style="max-width: 520px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 28px; text-align: center;">
             <div style="font-size: 48px; margin-bottom: 12px;">
                 <?php echo $is_premium ? '🌟' : '🛡️'; ?>

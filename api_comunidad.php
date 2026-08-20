@@ -12,7 +12,6 @@ $user_id = $_SESSION["user_id"];
 $action = $_POST['action'] ?? $_GET['action'] ?? 'get_messages';
 $last_id = intval($_POST['last_id'] ?? $_GET['last_id'] ?? 0);
 
-// 1. PUBLICAR MENSAJE EN LA COMUNIDAD
 if ($action === 'send_message') {
     $mensaje = trim($_POST['mensaje'] ?? '');
     $album_id = intval($_POST['album_id'] ?? 0);
@@ -24,7 +23,6 @@ if ($action === 'send_message') {
     }
 }
 
-// 2. OBTENER MENSAJES (Soporta delta a través de last_id)
 $stmt_msgs = $conexion->prepare("
     SELECT m.*, u.nombre as autor_nombre, u.avatar as autor_avatar, u.es_premium as autor_premium, a.nombre as album_nombre, a.icono as album_icono
     FROM Mensaje_Comunidad m
@@ -59,7 +57,6 @@ while ($row = $res->fetch_assoc()) {
     }
 }
 
-// Obtener usuarios conectados / registrados activos
 $res_online = $conexion->query("SELECT ID_usuario, nombre, avatar, es_premium FROM Usuario ORDER BY ID_usuario DESC LIMIT 20");
 $online_users = [];
 while ($u = $res_online->fetch_assoc()) {

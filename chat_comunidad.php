@@ -9,7 +9,6 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-// Obtener álbumes para selector en mensajes
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -38,15 +37,15 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--bg-surface);
+            background: var(
             padding: 10px 14px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
+            border-radius: var(
+            border: 1px solid var(
             margin-bottom: 8px;
             transition: all 0.2s ease;
         }
         .user-item-lobby:hover {
-            border-color: var(--panini-gold);
+            border-color: var(
             transform: translateX(4px);
         }
     </style>
@@ -66,10 +65,10 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
         </div>
 
         <div class="community-layout">
-            <!-- Columna Principal: Mensajes del Chat Global -->
+            
             <div class="chat-panel" style="height: 100%;">
                 <div class="chat-messages" id="globalChatMessages" style="padding: 20px;">
-                    <!-- Se puebla dinámicamente -->
+                    
                 </div>
 
                 <form class="chat-input-form" onsubmit="sendCommunityMessage(event)" style="padding: 16px; background: var(--bg-surface); display: flex; flex-direction: column; gap: 10px;">
@@ -94,14 +93,14 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
                 </form>
             </div>
 
-            <!-- Columna Lateral: Coleccionistas Registrados en la Red -->
+            
             <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column;">
                 <h3 style="font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
                     <span>👥</span> Coleccionistas en la Red
                 </h3>
 
                 <div id="usersLobbyList" style="flex: 1; overflow-y: auto;">
-                    <!-- Se puebla dinámicamente -->
+                    
                 </div>
 
                 <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-color); text-align: center;">
@@ -122,7 +121,6 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
                 const data = await res.json();
 
                 if (data.success) {
-                    // Cargar nuevos mensajes
                     if (data.messages.length > 0) {
                         const container = document.getElementById('globalChatMessages');
                         data.messages.forEach(msg => {
@@ -151,7 +149,6 @@ $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
                         container.scrollTop = container.scrollHeight;
                     }
 
-                    // Actualizar lista lateral de usuarios
                     if (data.active_users) {
                         const usersContainer = document.getElementById('usersLobbyList');
                         usersContainer.innerHTML = '';

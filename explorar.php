@@ -9,27 +9,23 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-// Obtener álbumes
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $albums = $res_albums->fetch_all(MYSQLI_ASSOC);
 
 $active_album_id = intval($_GET['album_id'] ?? $_SESSION['active_album_id'] ?? ($albums[0]['ID_album'] ?? 1));
 $_SESSION['active_album_id'] = $active_album_id;
 
-// Álbum actual
 $stmt_alb = $conexion->prepare("SELECT * FROM Album WHERE ID_album = ?");
 $stmt_alb->bind_param("i", $active_album_id);
 $stmt_alb->execute();
 $current_album = $stmt_alb->get_result()->fetch_assoc();
 
-// 1. Obtener todas las figuritas del álbum
 $res_all_figs = $conexion->query("SELECT ID_figurita, numero_figurita, codigo_figurita, nombre_jugador, Seleccion, Holografica FROM Figurita WHERE ID_album = $active_album_id");
 $album_figuritas = [];
 while ($row = $res_all_figs->fetch_assoc()) {
     $album_figuritas[$row['ID_figurita']] = $row;
 }
 
-// 2. Inventario de mi usuario
 $my_inventory_res = $conexion->query("
     SELECT f.ID_figurita, i.estado, i.cantidad_repetidas 
     FROM Figurita f 
@@ -49,14 +45,12 @@ while ($row = $my_inventory_res->fetch_assoc()) {
     }
 }
 
-// 3. Buscar otros usuarios y calcular coincidencias
 $other_users_res = $conexion->query("SELECT ID_usuario, nombre, email, avatar, reputacion, es_premium FROM Usuario WHERE ID_usuario != $user_id");
 $matches = [];
 
 while ($other = $other_users_res->fetch_assoc()) {
     $other_id = $other['ID_usuario'];
 
-    // Inventario del otro usuario
     $other_inv_res = $conexion->query("
         SELECT f.ID_figurita, i.estado, i.cantidad_repetidas 
         FROM Figurita f 
@@ -72,12 +66,10 @@ while ($other = $other_users_res->fetch_assoc()) {
         $fig_data = $album_figuritas[$fid] ?? null;
         if (!$fig_data) continue;
 
-        // Si ellos tienen repetida y a mí me falta
         if ($row['cantidad_repetidas'] > 0 && isset($my_missing_ids[$fid])) {
             $they_can_give_me[] = $fig_data;
         }
 
-        // Si yo tengo repetida y a ellos les falta
         if (isset($my_repeated_ids[$fid]) && (empty($row['estado']) || $row['estado'] === 'falta')) {
             $i_can_give_them[] = $fig_data;
         }
@@ -96,7 +88,6 @@ while ($other = $other_users_res->fetch_assoc()) {
     }
 }
 
-// Ordenar: primero los perfect matches y con mayor cantidad de coincidencias
 usort($matches, function($a, $b) {
     return $b['score'] <=> $a['score'];
 });
@@ -114,7 +105,7 @@ usort($matches, function($a, $b) {
     <?php include("navbar.php"); ?>
 
     <div class="main-wrapper">
-        <!-- Selector de Álbum -->
+        
         <div class="album-selector-bar">
             <?php foreach ($albums as $alb): ?>
                 <a href="explorar.php?album_id=<?php echo $alb['ID_album']; ?>" 
@@ -168,9 +159,9 @@ usort($matches, function($a, $b) {
                             </div>
                         </div>
 
-                        <!-- Detalle de Cromos Cruzados -->
+                        
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
-                            <!-- Lo que te puede dar -->
+                            
                             <div style="background: var(--bg-surface); padding: 16px; border-radius: var(--radius-md); border-left: 4px solid var(--panini-emerald);">
                                 <div style="font-size: 14px; font-weight: 700; color: #34d399; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                                     <span>📥</span> Tiene repetidas que a vos TE FALTAN (<?php echo count($m['they_give']); ?>)
@@ -189,7 +180,7 @@ usort($matches, function($a, $b) {
                                 <?php endif; ?>
                             </div>
 
-                            <!-- Lo que vos le podés dar -->
+                            
                             <div style="background: var(--bg-surface); padding: 16px; border-radius: var(--radius-md); border-left: 4px solid var(--panini-gold);">
                                 <div style="font-size: 14px; font-weight: 700; color: var(--panini-gold); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
                                     <span>📤</span> Tenés repetidas que a él LE FALTAN (<?php echo count($m['i_give']); ?>)

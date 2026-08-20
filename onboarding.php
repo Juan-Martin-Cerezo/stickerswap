@@ -10,15 +10,12 @@ if (!isset($_SESSION["user_id"])) {
 $user_id = $_SESSION["user_id"];
 $step = intval($_GET['step'] ?? 1);
 
-// Obtener todos los álbumes disponibles
 $res_albums = $conexion->query("SELECT * FROM Album ORDER BY ID_album ASC");
 $all_albums = $res_albums->fetch_all(MYSQLI_ASSOC);
 
-// Procesar Paso 1: Selección de álbumes a coleccionar
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_albums"])) {
     $selected_albums = $_POST['albums'] ?? [];
 
-    // Limpiar álbumes previos
     $conexion->query("DELETE FROM Usuario_Album WHERE ID_usuario = $user_id");
 
     if (!empty($selected_albums)) {
@@ -29,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_albums"])) {
             $stmt_ua->execute();
         }
     } else {
-        // Por defecto al menos el primero
         $first_id = $all_albums[0]['ID_album'];
         $conexion->query("INSERT INTO Usuario_Album (ID_usuario, ID_album) VALUES ($user_id, $first_id)");
     }
@@ -38,13 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_albums"])) {
     exit;
 }
 
-// Procesar Paso 2: Carga rápida de figuritas o creación de álbum personalizado
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_stickers"])) {
     $album_id = intval($_POST['target_album_id'] ?? $all_albums[0]['ID_album']);
     $tengo_nums = trim($_POST['tengo_numeros'] ?? '');
     $rep_nums = trim($_POST['rep_numeros'] ?? '');
 
-    // Parsear números ingresados (ej: "1, 4, 5, 10-15, 23")
     function parseNumbers($str) {
         $nums = [];
         $parts = explode(',', $str);
@@ -72,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_stickers"])) {
     $tengo_arr = parseNumbers($tengo_nums);
     $rep_arr = parseNumbers($rep_nums);
 
-    // Obtener mapa numero_figurita -> ID_figurita para este álbum
     $stmt_m = $conexion->prepare("SELECT ID_figurita, numero_figurita FROM Figurita WHERE ID_album = ?");
     $stmt_m->bind_param("i", $album_id);
     $stmt_m->execute();
@@ -97,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_stickers"])) {
         }
     }
 
-    // Marcar repetidas adicionales si alguna no estaba en tengo
     foreach ($rep_arr as $num) {
         if (isset($figs_map[$num]) && !in_array($num, $tengo_arr)) {
             $fid = $figs_map[$num];
@@ -108,13 +100,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["save_stickers"])) {
         }
     }
 
-    // Completar onboarding
     $conexion->query("UPDATE Usuario SET onboarding_completado = 1 WHERE ID_usuario = $user_id");
     header("Location: dashboard.php");
     exit;
 }
 
-// Crear álbum personalizado si el usuario lo desea
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"])) {
     $nombre_alb = trim($_POST['custom_album_nombre'] ?? '');
     $cat_alb = trim($_POST['custom_album_categoria'] ?? 'Coleccionables');
@@ -129,7 +119,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
         $stmt_c->execute();
         $new_alb_id = $stmt_c->insert_id;
 
-        // Crear figuritas base para este álbum
         $stmt_cf = $conexion->prepare("INSERT INTO Figurita (ID_album, numero_figurita, codigo_figurita, nombre_jugador, Seleccion, posicion_rol, Holografica, rareza) VALUES (?, ?, ?, ?, ?, 'Cromo', 0, 'Común')");
         for ($i = 1; $i <= $cant_total; $i++) {
             $cod_f = "FIG-$i";
@@ -139,7 +128,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             $stmt_cf->execute();
         }
 
-        // Asociar al usuario
         $conexion->query("INSERT INTO Usuario_Album (ID_usuario, ID_album) VALUES ($user_id, $new_alb_id)");
         header("Location: onboarding.php?step=2");
         exit;
@@ -168,38 +156,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             gap: 8px;
             font-size: 14px;
             font-weight: 700;
-            color: var(--text-muted);
+            color: var(
         }
         .step-node.active {
-            color: var(--panini-gold);
+            color: var(
         }
         .step-circle {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: var(--bg-surface);
-            border: 2px solid var(--border-color);
+            background: var(
+            border: 2px solid var(
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
         }
         .step-node.active .step-circle {
-            border-color: var(--panini-gold);
+            border-color: var(
             background: rgba(252, 212, 0, 0.2);
-            color: var(--panini-gold);
+            color: var(
         }
         .album-selection-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            background: var(
+            border: 2px solid var(
+            border-radius: var(
             padding: 20px;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
         }
         .album-selection-card:hover {
-            border-color: var(--panini-gold);
+            border-color: var(
             transform: translateY(-3px);
         }
         .album-selection-card input[type="checkbox"] {
@@ -208,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             right: 18px;
             width: 22px;
             height: 22px;
-            accent-color: var(--panini-gold);
+            accent-color: var(
             cursor: pointer;
         }
     </style>
@@ -225,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
     </nav>
 
     <div class="main-wrapper" style="max-width: 900px;">
-        <!-- Barra de Progreso del Onboarding -->
+        
         <div class="step-progress-bar">
             <div class="step-node <?php echo ($step === 1) ? 'active' : ''; ?>">
                 <div class="step-circle">1</div>
@@ -239,7 +227,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
         </div>
 
         <?php if ($step === 1): ?>
-            <!-- ================= PASO 1: SELECCIÓN DE ÁLBUMES ================= -->
+            
             <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 32px; font-weight: 800; color: #fff;">¿Qué álbumes estás juntando?</h1>
                 <p style="color: var(--text-secondary); font-size: 16px; margin-top: 6px;">
@@ -274,7 +262,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
                 </div>
             </form>
 
-            <!-- Modal Crear Álbum Propio -->
+            
             <div id="customModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 20px;">
                 <div style="background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); max-width: 520px; width: 100%; padding: 28px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
@@ -309,7 +297,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["create_custom_album"]
             </div>
 
         <?php else: ?>
-            <!-- ================= PASO 2: CARGA RÁPIDA DE FIGURITAS ================= -->
+            
             <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 32px; font-weight: 800; color: #fff;">Cargá tus primeras figuritas</h1>
                 <p style="color: var(--text-secondary); font-size: 16px; margin-top: 6px;">

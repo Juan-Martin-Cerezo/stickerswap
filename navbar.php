@@ -1,5 +1,4 @@
 <?php
-// navbar.php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -8,7 +7,6 @@ $is_logged = isset($_SESSION["user_id"]);
 $current_page = basename($_SERVER['PHP_SELF']);
 $active_album_id = $_GET['album_id'] ?? $_SESSION['active_album_id'] ?? 1;
 
-// Contar intercambios pendientes para notificación
 $pending_trades_count = 0;
 if ($is_logged && isset($conexion)) {
     $uid = $_SESSION["user_id"];

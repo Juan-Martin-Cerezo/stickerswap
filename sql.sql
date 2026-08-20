@@ -1,6 +1,3 @@
--- ==========================================================
--- PROYECTO: Panini StickerSwap - Base de Datos Relacional
--- ==========================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS Mensaje_Comunidad;
@@ -14,7 +11,6 @@ DROP TABLE IF EXISTS Album;
 DROP TABLE IF EXISTS Usuario;
 SET FOREIGN_KEY_CHECKS = 1;
 
--- 1. Tabla de Usuarios
 CREATE TABLE Usuario (
     ID_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -29,7 +25,6 @@ CREATE TABLE Usuario (
     creado_en DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 2. Tabla de Álbumes
 CREATE TABLE Album (
     ID_album INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(50) UNIQUE NOT NULL,
@@ -42,7 +37,6 @@ CREATE TABLE Album (
     creado_por INT DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 3. Tabla de Relación Usuario - Álbum (Álbumes que junta cada usuario)
 CREATE TABLE Usuario_Album (
     ID_usuario_album INT AUTO_INCREMENT PRIMARY KEY,
     ID_usuario INT NOT NULL,
@@ -53,7 +47,6 @@ CREATE TABLE Usuario_Album (
     UNIQUE KEY uk_user_album (ID_usuario, ID_album)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 4. Tabla de Figuritas
 CREATE TABLE Figurita (
     ID_figurita INT AUTO_INCREMENT PRIMARY KEY,
     ID_album INT NOT NULL,
@@ -69,12 +62,11 @@ CREATE TABLE Figurita (
     UNIQUE KEY uk_album_numero (ID_album, numero_figurita)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 5. Tabla de Inventario de Coleccionistas
 CREATE TABLE Inventario (
     ID_inventario INT AUTO_INCREMENT PRIMARY KEY,
     ID_usuario INT NOT NULL,
     ID_figurita INT NOT NULL,
-    estado VARCHAR(50) NOT NULL DEFAULT 'tengo', -- 'tengo', 'falta', 'repetida'
+    estado VARCHAR(50) NOT NULL DEFAULT 'tengo',
     cantidad_repetidas INT NOT NULL DEFAULT 0,
     pegada_en_album BOOLEAN NOT NULL DEFAULT 1,
     actualizado_en DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -83,14 +75,13 @@ CREATE TABLE Inventario (
     UNIQUE KEY uk_usuario_figurita (ID_usuario, ID_figurita)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 6. Tabla de Intercambios
 CREATE TABLE Intercambio (
     ID_intercambio INT AUTO_INCREMENT PRIMARY KEY,
     ID_album INT NOT NULL,
     ID_usuario_1 INT NOT NULL,
     ID_usuario_2 INT NOT NULL,
     ultimo_proponente_id INT NOT NULL,
-    estado VARCHAR(50) NOT NULL DEFAULT 'pendiente', -- 'pendiente', 'aceptado', 'rechazado', 'cancelado'
+    estado VARCHAR(50) NOT NULL DEFAULT 'pendiente',
     fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     fecha_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_intercambio_album FOREIGN KEY (ID_album) REFERENCES Album(ID_album) ON DELETE CASCADE,
@@ -98,30 +89,27 @@ CREATE TABLE Intercambio (
     CONSTRAINT fk_intercambio_usuario2 FOREIGN KEY (ID_usuario_2) REFERENCES Usuario(ID_usuario) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 7. Tabla de Ítems del Intercambio (Figuritas en la mesa de negociación)
 CREATE TABLE Intercambio_Item (
     ID_item INT AUTO_INCREMENT PRIMARY KEY,
     ID_intercambio INT NOT NULL,
     ID_usuario_dueno INT NOT NULL,
     ID_figurita INT NOT NULL,
-    tipo VARCHAR(20) NOT NULL DEFAULT 'ofrecida', -- 'ofrecida', 'solicitada'
+    tipo VARCHAR(20) NOT NULL DEFAULT 'ofrecida',
     CONSTRAINT fk_item_intercambio FOREIGN KEY (ID_intercambio) REFERENCES Intercambio(ID_intercambio) ON DELETE CASCADE,
     CONSTRAINT fk_item_usuario FOREIGN KEY (ID_usuario_dueno) REFERENCES Usuario(ID_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_item_figurita FOREIGN KEY (ID_figurita) REFERENCES Figurita(ID_figurita) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 8. Tabla de Mensajes y Negociación en Tiempo Real
 CREATE TABLE Mensaje_Chat (
     ID_mensaje_chat INT AUTO_INCREMENT PRIMARY KEY,
     ID_intercambio INT NOT NULL,
     ID_usuario INT NOT NULL,
     contenido TEXT NOT NULL,
-    tipo VARCHAR(20) NOT NULL DEFAULT 'usuario', -- 'usuario', 'sistema', 'propuesta'
+    tipo VARCHAR(20) NOT NULL DEFAULT 'usuario',
     fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_mensaje_intercambio FOREIGN KEY (ID_intercambio) REFERENCES Intercambio(ID_intercambio) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 9. Tabla de Chat Global de la Comunidad
 CREATE TABLE Mensaje_Comunidad (
     ID_mensaje INT AUTO_INCREMENT PRIMARY KEY,
     ID_usuario INT NOT NULL,

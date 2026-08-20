@@ -11,7 +11,6 @@ $user_id = $_SESSION["user_id"];
 $trade_id = intval($_GET['id'] ?? 0);
 $is_new = isset($_GET['nuevo']);
 
-// Modo Crear Nuevo Intercambio
 if ($is_new) {
     $other_user_id = intval($_GET['con_usuario'] ?? 0);
     $album_id = intval($_GET['album_id'] ?? 1);
@@ -21,19 +20,16 @@ if ($is_new) {
         exit;
     }
 
-    // Datos del otro usuario
     $stmt_u = $conexion->prepare("SELECT * FROM Usuario WHERE ID_usuario = ?");
     $stmt_u->bind_param("i", $other_user_id);
     $stmt_u->execute();
     $other_user = $stmt_u->get_result()->fetch_assoc();
 
-    // Datos del álbum
     $stmt_a = $conexion->prepare("SELECT * FROM Album WHERE ID_album = ?");
     $stmt_a->bind_param("i", $album_id);
     $stmt_a->execute();
     $current_album = $stmt_a->get_result()->fetch_assoc();
 
-    // Mis figuritas repetidas en este álbum
     $stmt_my_rep = $conexion->prepare("
         SELECT f.*, i.cantidad_repetidas 
         FROM Inventario i
@@ -44,7 +40,6 @@ if ($is_new) {
     $stmt_my_rep->execute();
     $my_repeated = $stmt_my_rep->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    // Figuritas repetidas del otro usuario
     $stmt_their_rep = $conexion->prepare("
         SELECT f.*, i.cantidad_repetidas 
         FROM Inventario i
@@ -57,7 +52,6 @@ if ($is_new) {
 
     $page_mode = 'create';
 } else {
-    // Modo Sala de Negociación Existente
     $stmt_t = $conexion->prepare("
         SELECT i.*, 
                u1.nombre as user1_nombre, u1.avatar as user1_avatar, u1.es_premium as user1_premium,
@@ -85,7 +79,6 @@ if ($is_new) {
     $other_user_avatar = $is_user1 ? $trade['user2_avatar'] : $trade['user1_avatar'];
     $other_user_premium = $is_user1 ? $trade['user2_premium'] : $trade['user1_premium'];
 
-    // Obtener figuritas en la mesa de negociación
     $stmt_items = $conexion->prepare("
         SELECT it.*, f.numero_figurita, f.codigo_figurita, f.nombre_jugador, f.Seleccion, f.Holografica, f.rareza
         FROM Intercambio_Item it
@@ -107,7 +100,6 @@ if ($is_new) {
         }
     }
 
-    // Mis figuritas repetidas para contraoferta
     $stmt_my_rep = $conexion->prepare("
         SELECT f.*, i.cantidad_repetidas 
         FROM Inventario i
@@ -118,7 +110,6 @@ if ($is_new) {
     $stmt_my_rep->execute();
     $my_repeated = $stmt_my_rep->get_result()->fetch_all(MYSQLI_ASSOC);
 
-    // Figuritas repetidas del otro usuario para contraoferta
     $stmt_their_rep = $conexion->prepare("
         SELECT f.*, i.cantidad_repetidas 
         FROM Inventario i
@@ -144,17 +135,17 @@ if ($is_new) {
         .selectable-sticker {
             cursor: pointer;
             border: 2px solid transparent;
-            border-radius: var(--radius-sm);
+            border-radius: var(
             padding: 8px;
-            background: var(--bg-surface);
+            background: var(
             transition: all 0.2s ease;
         }
         .selectable-sticker:hover {
-            border-color: var(--panini-gold);
+            border-color: var(
             transform: scale(1.02);
         }
         .selectable-sticker.selected {
-            border-color: var(--panini-gold);
+            border-color: var(
             background: rgba(252, 212, 0, 0.15);
             box-shadow: 0 0 10px rgba(252, 212, 0, 0.3);
         }
@@ -165,7 +156,7 @@ if ($is_new) {
 
     <div class="main-wrapper">
         <?php if ($page_mode === 'create'): ?>
-            <!-- ================= FORMULARIO NUEVA PROPUESTA ================= -->
+            
             <div style="margin-bottom: 24px;">
                 <span class="brand-badge"><?php echo htmlspecialchars($current_album['nombre']); ?></span>
                 <h1 style="font-size: 26px; font-weight: 800; color: #fff; margin-top: 6px;">Proponer Intercambio con <?php echo htmlspecialchars($other_user['nombre']); ?></h1>
@@ -174,7 +165,7 @@ if ($is_new) {
 
             <div class="trade-board">
                 <div class="trade-exchange-grid">
-                    <!-- Columna: Lo que Das -->
+                    
                     <div class="trade-column give">
                         <div class="trade-col-header">
                             <span style="color: var(--panini-gold);">📤 Vos Entregás (Das)</span>
@@ -204,10 +195,10 @@ if ($is_new) {
                         <?php endif; ?>
                     </div>
 
-                    <!-- Versus -->
+                    
                     <div class="trade-versus-badge">⇄</div>
 
-                    <!-- Columna: Lo que Recibes -->
+                    
                     <div class="trade-column receive">
                         <div class="trade-col-header">
                             <span style="color: var(--panini-emerald);">📥 Vos Recibes</span>
@@ -247,7 +238,7 @@ if ($is_new) {
             </div>
 
         <?php else: ?>
-            <!-- ================= SALA DE INTERCAMBIO Y CHAT EN VIVO ================= -->
+            
             <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -259,7 +250,7 @@ if ($is_new) {
                     </h1>
                 </div>
 
-                <!-- Estado del Intercambio -->
+                
                 <div>
                     <?php if ($trade['estado'] === 'pendiente'): ?>
                         <span style="background: rgba(252, 212, 0, 0.2); color: var(--panini-gold); border: 1px solid rgba(252, 212, 0, 0.4); padding: 6px 14px; border-radius: var(--radius-full); font-weight: 700; font-size: 13px;">
@@ -282,10 +273,10 @@ if ($is_new) {
             </div>
 
             <div class="trade-container">
-                <!-- Columna Izquierda: Mesa de Negociación (Das vs Recibes) -->
+                
                 <div class="trade-board">
                     <div class="trade-exchange-grid">
-                        <!-- Lo que Das -->
+                        
                         <div class="trade-column give">
                             <div class="trade-col-header">
                                 <span style="color: var(--panini-gold);">📤 Lo que Vos Entregás (Das)</span>
@@ -313,7 +304,7 @@ if ($is_new) {
 
                         <div class="trade-versus-badge">⇄</div>
 
-                        <!-- Lo que Recibes -->
+                        
                         <div class="trade-column receive">
                             <div class="trade-col-header">
                                 <span style="color: var(--panini-emerald);">📥 Lo que Recibes</span>
@@ -340,7 +331,7 @@ if ($is_new) {
                         </div>
                     </div>
 
-                    <!-- Botones de Acción de la Negociación -->
+                    
                     <?php if ($trade['estado'] === 'pendiente'): 
                         $is_my_turn = ($trade['ultimo_proponente_id'] != $user_id);
                     ?>
@@ -374,7 +365,7 @@ if ($is_new) {
                     <?php endif; ?>
                 </div>
 
-                <!-- Columna Derecha: Panel de Chat en Tiempo Real -->
+                
                 <div class="chat-panel">
                     <div class="chat-header">
                         <div style="font-size: 24px;"><?php echo $other_user_avatar; ?></div>
@@ -386,12 +377,12 @@ if ($is_new) {
                         </div>
                     </div>
 
-                    <!-- Mensajes de Chat -->
+                    
                     <div class="chat-messages" id="chatMessages">
-                        <!-- Se puebla dinámicamente vía AJAX -->
+                        
                     </div>
 
-                    <!-- Formulario de Entrada de Mensaje -->
+                    
                     <form class="chat-input-form" onsubmit="sendChatMessage(event)">
                         <input type="text" id="chatInput" class="chat-input" placeholder="Escribí un mensaje..." autocomplete="off">
                         <button type="submit" class="btn-primary" style="padding: 10px 16px;">
@@ -401,7 +392,7 @@ if ($is_new) {
                 </div>
             </div>
 
-            <!-- MODAL DE CONTRAOFERTA -->
+            
             <div id="counterModal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 200; align-items: center; justify-content: center; padding: 20px;">
                 <div style="background: var(--bg-card); border: 1px solid var(--border-gold); border-radius: var(--radius-lg); max-width: 720px; width: 100%; padding: 24px; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -410,7 +401,7 @@ if ($is_new) {
                     </div>
 
                     <div class="trade-exchange-grid" style="margin-bottom: 20px;">
-                        <!-- Tus Repetidas -->
+                        
                         <div class="trade-column give">
                             <div class="trade-col-header">
                                 <span style="color: var(--panini-gold);">📤 Vos Ofreces</span>
@@ -428,7 +419,7 @@ if ($is_new) {
 
                         <div class="trade-versus-badge">⇄</div>
 
-                        <!-- Repetidas del Otro -->
+                        
                         <div class="trade-column receive">
                             <div class="trade-col-header">
                                 <span style="color: var(--panini-emerald);">📥 Vos Solicitás</span>
@@ -454,7 +445,7 @@ if ($is_new) {
         <?php endif; ?>
     </div>
 
-    <!-- Scripts de Intercambio y Chat en Vivo -->
+    
     <script>
         const selectedGive = new Set(<?php 
             if (!empty($items_i_give)) {
@@ -482,7 +473,6 @@ if ($is_new) {
             }
         }
 
-        // Crear nueva propuesta
         async function submitNewTrade(otherUserId, albumId) {
             if (selectedGive.size === 0 && selectedReceive.size === 0) {
                 alert('Debés seleccionar al menos una figurita para intercambiar.');
@@ -509,7 +499,6 @@ if ($is_new) {
             }
         }
 
-        // Acciones de intercambio (Aceptar / Rechazar / Cancelar)
         async function tradeAction(action) {
             const tradeId = <?php echo $trade_id; ?>;
             const formData = new FormData();
@@ -561,7 +550,6 @@ if ($is_new) {
             }
         }
 
-        // ================= SINCRONIZACIÓN DE CHAT EN VIVO =================
         <?php if ($page_mode === 'room'): ?>
             let lastMessageId = 0;
             const tradeId = <?php echo $trade_id; ?>;
@@ -617,7 +605,6 @@ if ($is_new) {
                 }
             }
 
-            // Iniciar polling continuo cada 1.5s
             pollChat();
             setInterval(pollChat, 1500);
         <?php endif; ?>
